@@ -550,6 +550,20 @@ class Date {
         #endif
     }
 };
+#if defined(SWIGPYTHON)
+%extend Date {
+%pythoncode {
+def __reduce__(self):
+%#ifdef QL_HIGH_RESOLUTION_DATE
+    args = self.dayOfMonth(), self.month(), self.year(), self.hours(), self.minutes(), self.seconds(), self.miliseconds(), self.microseconds()
+%#else
+    args = self.dayOfMonth(), self.month(), self.year()
+%#endif
+    return self.__class__, args
+}
+}
+#endif
+
 
 class DateParser {
   public:

@@ -285,6 +285,14 @@ namespace QuantLib {
     // others
 
     class NullCalendar : public Calendar {};
+    #if defined(SWIGPYTHON)
+    %extend NullCalendar {
+    %pythoncode {
+    def __reduce__(self):
+      return self.__class__, ()
+    }
+    }
+    #endif
 
     class WeekendsOnly : public Calendar {};
 

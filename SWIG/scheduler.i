@@ -116,6 +116,15 @@ class Schedule {
         #endif
     }
 };
+#if defined(SWIGPYTHON)
+%extend Schedule {
+%pythoncode {
+def __reduce__(self):
+    args = [self.__getitem__(i) for i in range(self.__len__())], NullCalendar(), Following
+    return self.__class__, args
+}
+}
+#endif
 
 
 #endif
