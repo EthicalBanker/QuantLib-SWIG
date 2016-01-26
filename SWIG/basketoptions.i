@@ -50,6 +50,14 @@ class MinBasketPayoffPtr : public BasketPayoffPtr  {
         }
     }
 };
+#if defined(SWIGPYTHON)
+%extend MinBasketPayoffPtr {
+%pythoncode {
+def __reduce__(self):
+    return self.__class__, ()
+}
+}
+#endif
 
 %rename(MaxBasketPayoff) MaxBasketPayoffPtr;
 class MaxBasketPayoffPtr : public BasketPayoffPtr  {
@@ -60,6 +68,15 @@ class MaxBasketPayoffPtr : public BasketPayoffPtr  {
         }
     }
 };
+#if defined(SWIGPYTHON)
+%extend MaxBasketPayoffPtr {
+%pythoncode {
+def __reduce__(self):
+    return self.__class__, ()
+}
+}
+#endif
+
 
 %rename(AverageBasketPayoff) AverageBasketPayoffPtr;
 class AverageBasketPayoffPtr :
@@ -74,8 +91,18 @@ class AverageBasketPayoffPtr :
                                Size n) {
             return new AverageBasketPayoffPtr(new AverageBasketPayoff(p, n));
         }
+        const Array&  getWeights()      const { return boost::dynamic_pointer_cast<AverageBasketPayoff>(*self)->getWeights();      }
     }
 };
+#if defined(SWIGPYTHON)
+%extend AverageBasketPayoffPtr {
+%pythoncode {
+def __reduce__(self):
+    args = ([self.getWeights().__getitem__(i) for i in range(self.getWeights().__len__())],)
+    return self.__class__, args
+}
+}
+#endif
 
 
 %rename(BasketOption) BasketOptionPtr;
